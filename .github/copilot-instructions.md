@@ -10,11 +10,14 @@ This project is a GitHub Configurator built as a Cloudflare Worker using the Hon
 - **Framework**: Hono (lightweight, fast web framework)
 - **Language**: TypeScript
 - **Package Manager**: pnpm
+- **UI Rendering**: Hono JSX Renderer for server-side HTML generation
 
 ## Project Structure
 
 - `/src`: Source code
   - `index.ts`: Main entry point for the worker
+  - `components/`: JSX components for UI building
+  - `layouts/`: Layout components using JSX
 - `.github`: GitHub-related configuration files
 - `wrangler.jsonc`: Cloudflare Workers configuration
 
@@ -32,6 +35,13 @@ This project is a GitHub Configurator built as a Cloudflare Worker using the Hon
 - Use Hono's context (`c`) object for request and response handling
 - Implement proper error handling and status codes
 
+### JSX Components
+
+- Create reusable components in the `/src/components` directory
+- Use layouts for consistent page structure
+- Keep components small and focused on a single responsibility
+- Use TypeScript for props typing
+
 ### Cloudflare Workers
 
 - Remember that Workers run in a V8 isolate environment
@@ -46,6 +56,12 @@ This project is a GitHub Configurator built as a Cloudflare Worker using the Hon
 2. Implement the handler function
 3. Add appropriate validation and error handling
 4. Document the API endpoint
+
+### Adding a new Page
+
+1. Create necessary JSX components
+2. Add a route in `src/index.ts` using the `jsxRenderer` middleware
+3. Implement the handler function that returns `c.render(<YourComponent />)`
 
 ### Working with GitHub API
 
