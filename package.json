@@ -5,7 +5,10 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.7.4"
+    "@hono/oauth-providers": "^0.6.2",
+    "@octokit/auth-token": "^5.1.2",
+    "hono": "^4.7.4",
+    "octokit": "^4.1.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250214.0",
