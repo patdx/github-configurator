@@ -4,8 +4,7 @@
   "main": "src/index.tsx",
   "compatibility_date": "2025-03-09",
   "vars": {
-    "GITHUB_ID": "", // To be filled in with your GitHub OAuth App client ID
-    "GITHUB_SECRET": "", // To be filled in with your GitHub OAuth App client secret
+    "GITHUB_ID": "Iv23liQ5GTFjLY8abh7Q",
   },
   "compatibility_flags": ["nodejs_compat"],
   // "kv_namespaces": [
