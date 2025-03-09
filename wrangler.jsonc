@@ -6,6 +6,9 @@
   "vars": {
     "GITHUB_ID": "Iv23liQ5GTFjLY8abh7Q",
   },
+  "observability": {
+    "enabled": true,
+  },
   "compatibility_flags": ["nodejs_compat"],
   // "kv_namespaces": [
   //   {
