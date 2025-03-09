@@ -1,7 +1,7 @@
 import { FC } from "hono/jsx";
 
 type MainLayoutProps = {
-  children: JSX.Element;
+  children: any;
   title?: string;
 };
 

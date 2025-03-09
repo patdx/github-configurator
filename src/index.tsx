@@ -10,6 +10,7 @@ import {
   fetchUserRepositories,
   fetchUserDetails,
   configureRepository,
+  fetchAllRepositories,
 } from "./utils/github";
 import {
   setSessionToken,
@@ -45,8 +46,8 @@ app.get(
     },
     {
       stream: true,
-    }
-  )
+    },
+  ),
 );
 
 // Home route - show login or redirect to dashboard if authenticated
@@ -75,7 +76,7 @@ app.use(
     //   // Redirect to dashboard
     //   return ctx.redirect("/dashboard");
     // },
-  })
+  }),
 );
 
 app.get("/auth/github", async (c, next) => {
@@ -107,11 +108,31 @@ app.get("/dashboard", authMiddleware, async (c) => {
   }
 
   try {
-    // Fetch user details and repositories
-    const user = await fetchUserDetails(accessToken);
-    const repositories = await fetchUserRepositories(accessToken);
+    const batchSize = 10;
 
-    return c.render(<Dashboard user={user} repositories={repositories} />);
+    // Create promises for user details and repository batches
+    const userPromise = fetchUserDetails(accessToken);
+
+    // Get batched repository promises - each batch will resolve independently
+    const repositoryBatches = await fetchUserRepositories(
+      accessToken,
+      1,
+      100,
+      batchSize,
+    );
+
+    // Create a single promise that aggregates all repositories for stats
+    const repositoriesPromise = fetchAllRepositories(accessToken);
+
+    // Pass both the individual batch promises and the aggregated promise to the Dashboard
+    return c.render(
+      <Dashboard
+        userPromise={userPromise}
+        repositoriesPromise={repositoriesPromise}
+        repositoryBatches={repositoryBatches}
+        batchSize={batchSize}
+      />,
+    );
   } catch (error) {
     console.error("Dashboard error:", error);
     // If there's an error, clear the session and redirect to home
@@ -134,15 +155,17 @@ api.post("/repos/:owner/:repo/configure", authMiddleware, async (c) => {
 
   try {
     const updatedRepo = await configureRepository(accessToken, owner, repo);
-    return c.json({ success: true, repository: updatedRepo });
+    // Redirect to dashboard instead of returning JSON
+    return c.redirect(
+      "/dashboard?configured=" + encodeURIComponent(`${owner}/${repo}`),
+    );
   } catch (error) {
     console.error(`Error configuring repo ${owner}/${repo}:`, error);
-    return c.json(
-      {
-        success: false,
-        error: "Failed to update repository settings",
-      },
-      500
+    // Redirect to dashboard with error message
+    return c.redirect(
+      `/dashboard?error=config_failed&repo=${encodeURIComponent(
+        `${owner}/${repo}`,
+      )}`,
     );
   }
 });

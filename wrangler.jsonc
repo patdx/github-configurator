@@ -2,13 +2,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "github-configurator",
   "main": "src/index.tsx",
-  "compatibility_date": "2025-03-09"
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
-  // "vars": {
-  //   "MY_VAR": "my-variable"
-  // },
+  "compatibility_date": "2025-03-09",
+  "vars": {
+    "GITHUB_ID": "", // To be filled in with your GitHub OAuth App client ID
+    "GITHUB_SECRET": "", // To be filled in with your GitHub OAuth App client secret
+  },
+  "compatibility_flags": ["nodejs_compat"],
   // "kv_namespaces": [
   //   {
   //     "binding": "MY_KV_NAMESPACE",
@@ -30,7 +29,7 @@
   // ],
   // "ai": {
   //   "binding": "AI"
-  // },
+  // ],
   // "observability": {
   //   "enabled": true,
   //   "head_sampling_rate": 1
