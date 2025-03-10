@@ -1,8 +1,11 @@
 {
   "name": "github-configurator",
+  "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@hono/oauth-providers": "^0.6.2",
@@ -11,8 +14,10 @@
     "octokit": "^4.1.2"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^0.1.9",
     "@cloudflare/workers-types": "^4.20250214.0",
     "prettier": "^3.5.3",
+    "vite": "^6.2.1",
     "wrangler": "^3.109.2"
   },
   "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3"
