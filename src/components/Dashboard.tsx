@@ -1,24 +1,24 @@
-import { FC, Suspense } from "hono/jsx";
-import { Repository, RepositoryList } from "./RepositoryList";
+import { FC, Suspense } from 'hono/jsx'
+import { Repository, RepositoryList } from './RepositoryList'
 
 type User = {
-  login: string;
-  avatar_url: string;
-  name: string | null;
-};
+  login: string
+  avatar_url: string
+  name: string | null
+}
 
 type DashboardProps = {
-  userPromise: Promise<User>;
-  repositoriesPromise: Promise<Repository[]>;
-  repositoryBatches: Promise<Repository[]>[];
-  batchSize?: number;
-};
+  userPromise: Promise<User>
+  repositoriesPromise: Promise<Repository[]>
+  repositoryBatches: Promise<Repository[]>[]
+  batchSize?: number
+}
 
 // Async component for user info
 const AsyncUserInfo: FC<{ userPromise: Promise<User> }> = async ({
   userPromise,
 }) => {
-  const user = await userPromise;
+  const user = await userPromise
 
   return (
     <div class="user-info card">
@@ -35,18 +35,18 @@ const AsyncUserInfo: FC<{ userPromise: Promise<User> }> = async ({
         </a>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Async component for repository stats
 const AsyncStats: FC<{ repositoriesPromise: Promise<Repository[]> }> = async ({
   repositoriesPromise,
 }) => {
-  const repositories = await repositoriesPromise;
+  const repositories = await repositoriesPromise
   const configuredCount = repositories.filter(
     (repo) => repo.is_squash_merge_only,
-  ).length;
-  const unconfiguredCount = repositories.length - configuredCount;
+  ).length
+  const unconfiguredCount = repositories.length - configuredCount
 
   return (
     <div class="stats-container">
@@ -63,8 +63,8 @@ const AsyncStats: FC<{ repositoriesPromise: Promise<Repository[]> }> = async ({
         <div class="stat-label">Need Configuration</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const Dashboard: FC<DashboardProps> = ({
   userPromise,
@@ -146,5 +146,5 @@ export const Dashboard: FC<DashboardProps> = ({
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

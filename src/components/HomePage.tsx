@@ -1,4 +1,4 @@
-import { FC } from "hono/jsx";
+import { FC } from 'hono/jsx'
 
 export const HomePage: FC = () => {
   return (
@@ -61,5 +61,5 @@ export const HomePage: FC = () => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

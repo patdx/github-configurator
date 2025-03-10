@@ -1,13 +1,13 @@
-import { FC } from "hono/jsx";
+import { FC } from 'hono/jsx'
 
 type MainLayoutProps = {
-  children: any;
-  title?: string;
-};
+  children: any
+  title?: string
+}
 
 export const MainLayout: FC<MainLayoutProps> = ({
   children,
-  title = "GitHub Configurator",
+  title = 'GitHub Configurator',
 }) => {
   return (
     <html>
@@ -88,5 +88,5 @@ export const MainLayout: FC<MainLayoutProps> = ({
         </div>
       </body>
     </html>
-  );
-};
+  )
+}

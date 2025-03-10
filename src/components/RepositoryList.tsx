@@ -1,25 +1,25 @@
-import { FC, Suspense } from "hono/jsx";
+import { FC, Suspense } from 'hono/jsx'
 
 export type Repository = {
-  id: number;
-  name: string;
-  full_name: string;
+  id: number
+  name: string
+  full_name: string
   owner: {
-    login: string;
-  };
-  html_url: string;
-  description: string | null;
-  private: boolean;
-  allow_squash_merge: boolean;
-  allow_merge_commit: boolean;
-  allow_rebase_merge: boolean;
-  is_squash_merge_only: boolean;
-};
+    login: string
+  }
+  html_url: string
+  description: string | null
+  private: boolean
+  allow_squash_merge: boolean
+  allow_merge_commit: boolean
+  allow_rebase_merge: boolean
+  is_squash_merge_only: boolean
+}
 
 type RepositoryListProps = {
-  repositoryBatches: Promise<Repository[]>[];
-  batchSize?: number;
-};
+  repositoryBatches: Promise<Repository[]>[]
+  batchSize?: number
+}
 
 // Component to render a single repository card
 const RepositoryCard: FC<{ repo: Repository }> = ({ repo }) => {
@@ -31,8 +31,8 @@ const RepositoryCard: FC<{ repo: Repository }> = ({ repo }) => {
             {repo.full_name}
           </a>
         </h3>
-        <span class={`repo-visibility ${repo.private ? "private" : "public"}`}>
-          {repo.private ? "Private" : "Public"}
+        <span class={`repo-visibility ${repo.private ? 'private' : 'public'}`}>
+          {repo.private ? 'Private' : 'Public'}
         </span>
       </div>
 
@@ -42,9 +42,9 @@ const RepositoryCard: FC<{ repo: Repository }> = ({ repo }) => {
         <div class="settings-status">
           <h4>Merge Settings:</h4>
           <ul>
-            <li>Squash merges: {repo.allow_squash_merge ? "✅" : "❌"}</li>
-            <li>Merge commits: {repo.allow_merge_commit ? "✅" : "❌"}</li>
-            <li>Rebase merges: {repo.allow_rebase_merge ? "✅" : "❌"}</li>
+            <li>Squash merges: {repo.allow_squash_merge ? '✅' : '❌'}</li>
+            <li>Merge commits: {repo.allow_merge_commit ? '✅' : '❌'}</li>
+            <li>Rebase merges: {repo.allow_rebase_merge ? '✅' : '❌'}</li>
           </ul>
         </div>
 
@@ -71,18 +71,18 @@ const RepositoryCard: FC<{ repo: Repository }> = ({ repo }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Async component that awaits a single batch of repositories data
 const AsyncRepositoryBatch: FC<{
-  repositoriesPromise: Promise<Repository[]>;
-  batchIndex: number;
+  repositoriesPromise: Promise<Repository[]>
+  batchIndex: number
 }> = async ({ repositoriesPromise, batchIndex }) => {
-  const repositories = await repositoriesPromise;
+  const repositories = await repositoriesPromise
 
   if (repositories.length === 0) {
-    return <></>;
+    return <></>
   }
 
   return (
@@ -91,8 +91,8 @@ const AsyncRepositoryBatch: FC<{
         <RepositoryCard repo={repo} />
       ))}
     </div>
-  );
-};
+  )
+}
 
 // Main component that uses multiple Suspense boundaries
 export const RepositoryList: FC<RepositoryListProps> = ({
@@ -221,5 +221,5 @@ export const RepositoryList: FC<RepositoryListProps> = ({
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
