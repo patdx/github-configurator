@@ -21,16 +21,20 @@ const AsyncUserInfo: FC<{ userPromise: Promise<User> }> = async ({
   const user = await userPromise
 
   return (
-    <div class="user-info card">
-      <div class="user-avatar">
-        <img src={user.avatar_url} alt={`${user.login}'s avatar`} />
+    <div className="card flex items-center gap-6 p-6 mb-8">
+      <div>
+        <img
+          src={user.avatar_url}
+          alt={`${user.login}'s avatar`}
+          className="w-20 h-20 rounded-full"
+        />
       </div>
-      <div class="user-details">
-        <h2>{user.name || user.login}</h2>
-        <p class="username">@{user.login}</p>
+      <div className="flex-grow">
+        <h2 className="text-xl font-semibold">{user.name || user.login}</h2>
+        <p className="text-sm text-[#57606a]">@{user.login}</p>
       </div>
-      <div class="user-actions">
-        <a href="/auth/logout" class="btn">
+      <div>
+        <a href="/auth/logout" className="btn">
           Logout
         </a>
       </div>
@@ -49,18 +53,24 @@ const AsyncStats: FC<{ repositoriesPromise: Promise<Repository[]> }> = async ({
   const unconfiguredCount = repositories.length - configuredCount
 
   return (
-    <div class="stats-container">
-      <div class="stat-card card">
-        <div class="stat-value">{repositories.length}</div>
-        <div class="stat-label">Total Repositories</div>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+      <div className="card p-6 text-center">
+        <div className="text-4xl font-bold text-primary mb-2">
+          {repositories.length}
+        </div>
+        <div className="text-sm text-[#57606a]">Total Repositories</div>
       </div>
-      <div class="stat-card card">
-        <div class="stat-value">{configuredCount}</div>
-        <div class="stat-label">Configured</div>
+      <div className="card p-6 text-center">
+        <div className="text-4xl font-bold text-primary mb-2">
+          {configuredCount}
+        </div>
+        <div className="text-sm text-[#57606a]">Configured</div>
       </div>
-      <div class="stat-card card">
-        <div class="stat-value">{unconfiguredCount}</div>
-        <div class="stat-label">Need Configuration</div>
+      <div className="card p-6 text-center">
+        <div className="text-4xl font-bold text-primary mb-2">
+          {unconfiguredCount}
+        </div>
+        <div className="text-sm text-[#57606a]">Need Configuration</div>
       </div>
     </div>
   )
@@ -73,16 +83,22 @@ export const Dashboard: FC<DashboardProps> = ({
   batchSize = 10,
 }) => {
   return (
-    <div class="dashboard">
+    <div className="py-4">
       <Suspense
-        fallback={<div class="loading-indicator">Loading user profile...</div>}
+        fallback={
+          <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
+            Loading user profile...
+          </div>
+        }
       >
         <AsyncUserInfo userPromise={userPromise} />
       </Suspense>
 
       <Suspense
         fallback={
-          <div class="loading-indicator">Loading repository statistics...</div>
+          <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
+            Loading repository statistics...
+          </div>
         }
       >
         <AsyncStats repositoriesPromise={repositoriesPromise} />
@@ -92,59 +108,6 @@ export const Dashboard: FC<DashboardProps> = ({
         repositoryBatches={repositoryBatches}
         batchSize={batchSize}
       />
-
-      <style>{`
-        .dashboard {
-          padding: 1rem 0;
-        }
-        .loading-indicator {
-          padding: 2rem;
-          text-align: center;
-          background-color: #f6f8fa;
-          border-radius: 6px;
-          border: 1px dashed var(--color-border);
-          margin-bottom: 1.5rem;
-        }
-        .user-info {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-          padding: 1.5rem;
-          margin-bottom: 2rem;
-        }
-        .user-avatar img {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-        }
-        .user-details {
-          flex-grow: 1;
-        }
-        .username {
-          color: #57606a;
-          font-size: 0.9rem;
-        }
-        .stats-container {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 1.5rem;
-          margin-bottom: 2rem;
-        }
-        .stat-card {
-          padding: 1.5rem;
-          text-align: center;
-        }
-        .stat-value {
-          font-size: 2.5rem;
-          font-weight: bold;
-          color: var(--color-primary);
-          margin-bottom: 0.5rem;
-        }
-        .stat-label {
-          font-size: 0.9rem;
-          color: #57606a;
-        }
-      `}</style>
     </div>
   )
 }

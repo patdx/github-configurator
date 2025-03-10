@@ -2,14 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "github-configurator",
   "main": "src/index.tsx",
-  "compatibility_date": "2025-03-09",
+  "compatibility_date": "2025-02-24",
   "vars": {
     "GITHUB_ID": "Iv23liQ5GTFjLY8abh7Q",
   },
   "observability": {
     "enabled": true,
   },
-  "compatibility_flags": ["nodejs_als"],
+  "compatibility_flags": ["nodejs_compat"],
+  // "compatibility_flags": ["nodejs_als"],
   // "kv_namespaces": [
   //   {
   //     "binding": "MY_KV_NAMESPACE",
