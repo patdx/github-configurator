@@ -1,4 +1,4 @@
-import { FC, Suspense } from 'hono/jsx'
+import { ErrorBoundary, FC, Suspense } from 'hono/jsx'
 import { Repository, RepositoryList } from './RepositoryList'
 
 type User = {
@@ -84,25 +84,29 @@ export const Dashboard: FC<DashboardProps> = ({
 }) => {
   return (
     <div className="py-4">
-      <Suspense
-        fallback={
-          <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
-            Loading user profile...
-          </div>
-        }
-      >
-        <AsyncUserInfo userPromise={userPromise} />
-      </Suspense>
+      <ErrorBoundary fallback={<div>Something went wrong...</div>}>
+        <Suspense
+          fallback={
+            <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
+              Loading user profile...
+            </div>
+          }
+        >
+          <AsyncUserInfo userPromise={userPromise} />
+        </Suspense>
+      </ErrorBoundary>
 
-      <Suspense
-        fallback={
-          <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
-            Loading repository statistics...
-          </div>
-        }
-      >
-        <AsyncStats repositoriesPromise={repositoriesPromise} />
-      </Suspense>
+      <ErrorBoundary fallback={<div>Something went wrong...</div>}>
+        <Suspense
+          fallback={
+            <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-6">
+              Loading repository statistics...
+            </div>
+          }
+        >
+          <AsyncStats repositoriesPromise={repositoriesPromise} />
+        </Suspense>
+      </ErrorBoundary>
 
       <RepositoryList
         repositoryBatches={repositoryBatches}

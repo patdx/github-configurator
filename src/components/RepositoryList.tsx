@@ -1,4 +1,4 @@
-import { FC, Suspense } from 'hono/jsx'
+import { ErrorBoundary, FC, Suspense } from 'hono/jsx'
 
 export type Repository = {
   id: number
@@ -117,18 +117,20 @@ export const RepositoryList: FC<RepositoryListProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {repositoryBatches.length > 0 ? (
           repositoryBatches.map((batch, index) => (
-            <Suspense
-              fallback={
-                <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-4">
-                  Loading batch {index + 1}...
-                </div>
-              }
-            >
-              <AsyncRepositoryBatch
-                repositoriesPromise={batch}
-                batchIndex={index}
-              />
-            </Suspense>
+            <ErrorBoundary fallback={<div>Something went wrong...</div>}>
+              <Suspense
+                fallback={
+                  <div className="p-8 text-center bg-[#f6f8fa] rounded-md border border-dashed border-border mb-4">
+                    Loading batch {index + 1}...
+                  </div>
+                }
+              >
+                <AsyncRepositoryBatch
+                  repositoriesPromise={batch}
+                  batchIndex={index}
+                />
+              </Suspense>
+            </ErrorBoundary>
           ))
         ) : (
           <p>No repositories available.</p>

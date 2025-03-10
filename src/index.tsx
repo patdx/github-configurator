@@ -1,30 +1,30 @@
-import { Hono } from 'hono'
-import { jsxRenderer } from 'hono/jsx-renderer'
-import { getCookie, setCookie } from 'hono/cookie'
 import { githubAuth } from '@hono/oauth-providers/github'
-import { MainLayout } from './layouts/MainLayout'
-import { HomePage } from './components/HomePage'
+import { Hono } from 'hono'
+import { contextStorage } from 'hono/context-storage'
+import { HTTPException } from 'hono/http-exception'
+import { jsxRenderer } from 'hono/jsx-renderer'
 import { Dashboard } from './components/Dashboard'
-import { Repository } from './components/RepositoryList'
+import { HomePage } from './components/HomePage'
+import { MainLayout } from './layouts/MainLayout'
 import {
-  fetchUserRepositories,
-  fetchUserDetails,
+  authMiddleware,
+  clearSessionToken,
+  getSessionToken,
+  isAuthenticated,
+  setSessionToken,
+} from './utils/auth'
+import {
   configureRepository,
   fetchAllRepositories,
+  fetchUserDetails,
+  fetchUserRepositories,
 } from './utils/github'
-import {
-  setSessionToken,
-  getSessionToken,
-  clearSessionToken,
-  authMiddleware,
-  isAuthenticated,
-} from './utils/auth'
-import { contextStorage, getContext } from 'hono/context-storage'
-import { HTTPException } from 'hono/http-exception'
+import styles from './styles.css?inline'
 
 type Env = {
   GITHUB_ID: string
   GITHUB_SECRET: string
+  ASSETS: Fetcher
 }
 
 // Create the Hono app
@@ -33,6 +33,11 @@ const app = new Hono<{ Bindings: Env }>()
 app.onError((error, c) => {
   console.error('Error:', error)
   return c.json({ error: 'An error occurred' }, 500)
+})
+
+app.notFound((c) => {
+  console.log(`Not found: ${c.req.url}`)
+  return c.env.ASSETS.fetch(c.req.raw)
 })
 
 app.use(contextStorage())
@@ -49,6 +54,16 @@ app.get(
     },
   ),
 )
+
+app.get('/styles.css', (c) => {
+  return new Response(styles, {
+    headers: {
+      'Content-Type': 'text/css',
+      // 5 minute cache
+      'Cache-Control': 'public, max-age=300',
+    },
+  })
+})
 
 // Home route - show login or redirect to dashboard if authenticated
 app.get('/', async (c) => {
@@ -83,7 +98,6 @@ app.get('/auth/github', async (c, next) => {
   // if we are here, the req should contain either a valid session or a valid auth code
   const session = getSessionToken(c)
   const token = c.get('token')
-  console.log(`Session: ${session}, Token: ${token}`)
   if (token) {
     setSessionToken(c, token.token)
     return c.redirect('/dashboard')
@@ -163,9 +177,7 @@ api.post('/repos/:owner/:repo/configure', authMiddleware, async (c) => {
     console.error(`Error configuring repo ${owner}/${repo}:`, error)
     // Redirect to dashboard with error message
     return c.redirect(
-      `/dashboard?error=config_failed&repo=${encodeURIComponent(
-        `${owner}/${repo}`,
-      )}`,
+      `/dashboard?error=config_failed&repo=${encodeURIComponent(`${owner}/${repo}`)}`,
     )
   }
 })

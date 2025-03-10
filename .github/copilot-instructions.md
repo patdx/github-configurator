@@ -88,10 +88,7 @@ Deployment is handled via Wrangler:
 
 ## // Update globs depending on your framework
 
-name: tailwind_v4
-description: Guide for using Tailwind CSS v4 instead of v3.x
-globs: ["**/*.{js,ts,jsx,tsx,mdx,css}"]
-tags:
+name: tailwind_v4 description: Guide for using Tailwind CSS v4 instead of v3.x globs: ["**/*.{js,ts,jsx,tsx,mdx,css}"] tags:
 
 - tailwind
 - css
